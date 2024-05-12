@@ -25,19 +25,28 @@ void Train::addCage(bool cond) {
 }
 
 int Train::getLength() {
-    int Cages = 0;
-    Cage* current = first;
-    do {
-        if (current->light) {
-            Cages++;
-            current->light = false;
-            countOp += 2 * Cages;
+    if (!first)
+        return 0;
+
+    first->light = true;
+    Cage* copyfirst = first;
+    int cages = 1;
+
+    while (copyfirst->next != first) {
+        if (copyfirst->light) {
+            cages++;
+            copyfirst = copyfirst->next;
+        } else {
+            Cage* temp = copyfirst;
+            copyfirst->prev->next = copyfirst->next;
+            copyfirst->next->prev = copyfirst->prev;
+            copyfirst = copyfirst->next;
+            delete temp;
         }
-        current = current->next;
-    } while (current != first);
-    return Cages;
+    }
+
+    countOp += 2 * cages;
+    return cages;
 }
 
-int Train::getOpCount() { 
-    return countOp; 
-}
+int Train::getOpCount() { return countOp; } 
