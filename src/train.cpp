@@ -9,44 +9,36 @@ Train::Train() {
 void Train::addCage(bool cond) {
     if (!first) {
         Cage* newCage = new Cage;
-        newCage->light = cond;
-        newCage->next = newCage;
-        newCage->prev = newCage;
+        (*newCage).light = cond;
+        (*newCage).next = newCage;
+        (*newCage).prev = newCage;
         first = newCage;
     } else {
         Cage* copyfirst = first;
         Cage* newCage = new Cage;
-        newCage->light = cond;
-        newCage->next = first;
-        newCage->prev = first->prev;
-        first->prev->next = newCage;
-        first->prev = newCage;
+        (*newCage).light = cond;
+        (*newCage).next = first;
+        (*newCage).prev = (*first).prev;
+        (*(*first).prev).next = newCage;
+        (*first).prev = newCage;
     }
 }
 
 int Train::getLength() {
-    if (!first)
-        return 0;
-
-    first->light = true;
+    (*first).light = true;
     Cage* copyfirst = first;
     int cages = 1;
-
-    while (copyfirst->next != first) {
-        if (copyfirst->light) {
-            cages++;
-            copyfirst = copyfirst->next;
-        } else {
-            Cage* temp = copyfirst;
-            copyfirst->prev->next = copyfirst->next;
-            copyfirst->next->prev = copyfirst->prev;
-            copyfirst = copyfirst->next;
-            delete temp;
+    while ((*first).light) {
+        cages = 1;
+        copyfirst = (*first).next;
+        while (!(*copyfirst).light) {
+            copyfirst = (*copyfirst).next;
+            cages += 1;
         }
+        (*copyfirst).light = false;
+        countOp += 2 * cages;
     }
-
-    countOp += 2 * cages;
     return cages;
 }
 
-int Train::getOpCount() { return countOp; } 
+int Train::getOpCount() { return countOp; }
