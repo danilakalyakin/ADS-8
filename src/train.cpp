@@ -24,16 +24,16 @@ void Train::addCage(bool cond) {
 }
 
 int Train::getLength() {
-    if (!first)
-        return 0;
+if (!first)
+    return 0;
 
-    Cage* current = first;
-    int length = 0;
-    do {
-        length++;
-        current = current->next;
-    } while (current != first);
-        return length;
+Cage* current = first;
+int length = 0;
+do {
+    length++;
+    current = current->next;
+} while (current != first);
+    return length;
 }
 
 int Train::getOpCount() { return countOp; }
